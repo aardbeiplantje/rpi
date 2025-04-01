@@ -13,6 +13,9 @@ variable "DOCKER_REPOSITORY" {
 variable "DOCKER_TAG" {
   default = "latest"
 }
+variable "TAG_SHA" {
+  default = "latest"
+}
 target "build" {
   pull = true
   target = "img"
@@ -30,13 +33,15 @@ target "build" {
   args = {
     ARCH = "linux/armhf"
     TAR  = "rpi_zero_w_bookworm.tar.gz"
+    TAR_SHA = "6a290a44ab7084c74f60dd0569deb046fc32e14516046bcbd7e6a3aa46ca1150c5620a04a6eb6baf58e5e411e0ccfc43a023167070f758be799e0de8223c9477"
   }
 }
 
 target "release" {
   inherits = ["build"]
   output = [
-    "type=image,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG},push=true"
+    "type=image,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG},push=true",
+    "type=image,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${TAG_SHA},push=true"
   ]
   cache-to = [
     "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:cache,mode=max"
