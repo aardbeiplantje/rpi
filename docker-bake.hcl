@@ -28,6 +28,10 @@ target "build" {
     "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG}"
   ]
   buildkit = true
+  attest = [
+    "type=provenance,mode=max",
+    "type=sbom",
+  ]
   context = "."
   dockerfile = "Dockerfile"
   networks = ["host"]
