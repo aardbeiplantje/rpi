@@ -6,8 +6,8 @@ COPY ${TAR} /img.tar.gz
 WORKDIR /
 ARG ARCH=linux/armhf
 RUN if [ "${ARCH}" = "linux/armhf" ]; then \
-        mkdir -p /stage && cd /stage; \
-        tar xzf /img.tar.gz; \
+        mkdir -p /stage && cd /stage || exit 1; \
+        tar xzf /img.tar.gz || exit 1; \
         rm /img.tar.gz; \
         echo "GMT" > /stage/etc/timezone; \
         ln -sfT /usr/share/zoneinfo/right/GMT /stage/etc/localtime; \
@@ -22,3 +22,4 @@ FROM scratch AS img
 ENV TERM=
 COPY --from=builder-base /stage /
 RUN cat /etc/os-release
+ENTRYPOINT ["/bin/bash"]

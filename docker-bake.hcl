@@ -1,8 +1,8 @@
 group "default" {
-  targets = ["raspbian-development"]
+  targets = ["build"]
 }
 group "release" {
-  targets = ["raspbian-release"]
+  targets = ["release"]
 }
 variable "DOCKER_REGISTRY" {
   default = "ghcr.io"
@@ -17,25 +17,14 @@ target "build" {
   pull = true
   name = "raspbian-${env}"
   matrix = {
-    env = ["release", "development"]
+    env = ["release"]
   }
   target = "img"
-  progress = ["plain", "tty"]
   output = [
-    "type=image,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG},push=true"
+    "type=docker,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG}"
   ]
-  cache-to = [
-    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:cache,mode=max"
-  ]
-  cache-from = [
-    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:cache",
-    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG}"
-  ]
+  progress = ["plain", "tty"]
   buildkit = true
-  attest = [
-    "type=provenance,mode=max",
-    "type=sbom",
-  ]
   context = "."
   dockerfile = "Dockerfile"
   networks = ["host"]
@@ -50,4 +39,18 @@ target "build" {
 
 target "release" {
   inherits = ["build"]
+  output = [
+    "type=image,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG},push=true"
+  ]
+  cache-to = [
+    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:cache,mode=max"
+  ]
+  cache-from = [
+    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:cache",
+    "type=registry,ref=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG}"
+  ]
+  attest = [
+    "type=provenance,mode=max",
+    "type=sbom",
+  ]
 }
