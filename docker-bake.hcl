@@ -29,7 +29,7 @@ target "build" {
   dockerfile = "Dockerfile"
   networks = ["host"]
   platforms = [
-    "linux/armhf"
+    "linux/arm/v6"
   ]
   args = {
     ARCH = "linux/armhf"

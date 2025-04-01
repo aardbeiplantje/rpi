@@ -16,7 +16,6 @@ RUN if [ "${ARCH}" = "linux/armhf" ]; then \
 RUN if [ "${ARCH}" != "linux/armhf" ]; then \
        echo "This image is for Raspberry Pi Zero W only: "$(uname -m); exit 1; \
     fi
-RUN apt update && apt upgrade -y
 
 FROM scratch AS img
 ENV TERM=
