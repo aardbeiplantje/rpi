@@ -15,10 +15,6 @@ variable "DOCKER_TAG" {
 }
 target "build" {
   pull = true
-  name = "raspbian-${env}"
-  matrix = {
-    env = ["release"]
-  }
   target = "img"
   output = [
     "type=docker,name=${DOCKER_REGISTRY}/${DOCKER_REPOSITORY}/raspbian:${DOCKER_TAG}"
