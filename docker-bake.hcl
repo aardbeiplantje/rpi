@@ -1,8 +1,8 @@
 group "default" {
-  targets = ["build"]
+  targets = ["raspbian-development"]
 }
 group "release" {
-  targets = ["release"]
+  targets = ["raspbian-release"]
 }
 variable "DOCKER_REGISTRY" {
   default = "ghcr.io"
@@ -15,6 +15,10 @@ variable "DOCKER_TAG" {
 }
 target "build" {
   pull = true
+  name = "raspbian-${env}"
+  matrix = {
+    env = ["release", "development"]
+  }
   target = "img"
   progress = ["plain", "tty"]
   output = [
