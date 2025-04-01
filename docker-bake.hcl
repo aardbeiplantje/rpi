@@ -16,6 +16,12 @@ variable "DOCKER_TAG" {
 variable "TAG_SHA" {
   default = "latest"
 }
+variable "TAR_SHA" {
+  default = "6a290a44ab7084c74f60dd0569deb046fc32e14516046bcbd7e6a3aa46ca1150c5620a04a6eb6baf58e5e411e0ccfc43a023167070f758be799e0de8223c9477"
+}
+variable "TAR" {
+  default = "rpi_zero_w_bookworm.tar.gz"
+}
 target "build" {
   pull = true
   target = "img"
@@ -32,8 +38,8 @@ target "build" {
   ]
   args = {
     ARCH = "linux/armhf"
-    TAR  = "rpi_zero_w_bookworm.tar.gz"
-    TAR_SHA = "6a290a44ab7084c74f60dd0569deb046fc32e14516046bcbd7e6a3aa46ca1150c5620a04a6eb6baf58e5e411e0ccfc43a023167070f758be799e0de8223c9477"
+    TAR  = "${TAR}"
+    TAR_SHA = "${TAR_SHA}"
   }
 }
 
